@@ -1,7 +1,8 @@
 import sys
-import subprocess
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
-from PyQt5.uic.properties import QtWidgets
+from PyQt5 import QtWidgets, QtGui
+
+from Utils import common_utils
+from Helper import paths
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -9,27 +10,57 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__()
 
         self.setWindowTitle("Grocery List Application")
-        self.setGeometry(100, 100, 300, 200)
+        self.setGeometry(100, 100, 800, 600)
 
-        self.setup_buttons()
+        common_utils.load_stylesheet(paths.gui_theme_path, window)
 
-    def setup_buttons(self):
-        button1 = QtWidgets.QPushButton("Open Notepad", self)
-        button1.setGeometry(50, 50, 200, 30)
-        button1.clicked.connect(self.open_notepad)
+        self.nav_bar = NavigationBar()
+        self.setCentralWidget(QtWidgets.QWidget(self))
+        self.centralWidget().setLayout(QtWidgets.QVBoxLayout())
+        self.centralWidget().layout().addWidget(self.nav_bar)
 
-        button2 = QtWidgets.QPushButton("Open Calculator", self)
-        button2.setGeometry(50, 100, 200, 30)
-        button2.clicked.connect(self.open_calculator)
 
-    def open_notepad(self):
-        subprocess.Popen("notepad.exe")
+class NavigationBar(QtWidgets.QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.build_navbar()
 
-    def open_calculator(self):
-        subprocess.Popen("calc.exe")
+    def build_navbar(self):
+        layout = QtWidgets.QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+
+        button_widget = QtWidgets.QWidget()
+        button_layout = QtWidgets.QHBoxLayout(button_widget)
+        button_layout.setContentsMargins(10, 10, 10, 10)
+        button_layout.setSpacing(10)
+        self.home_button = QtWidgets.QPushButton("Home Button")
+        self.button2 = QtWidgets.QPushButton("Button 2")
+        self.button3 = QtWidgets.QPushButton("Button 3")
+
+        self.home_button.clicked.connect(self.on_home_button_clicked)
+        self.button2.clicked.connect(self.on_button2_clicked)
+        self.button3.clicked.connect(self.on_button3_clicked)
+
+        layout.addWidget(self.home_button)
+        layout.addWidget(self.button2)
+        layout.addWidget(self.button3)
+
+        layout.addWidget(button_widget, alignment=QtCore.Qt.AlignBottom)
+
+    def on_home_button_clicked(self):
+        print("Home Button Clicked!")
+
+    def on_button2_clicked(self):
+        print("Button 2 clicked!")
+
+    def on_button3_clicked(self):
+        print("Button 3 clicked!")
+
+class WindowController:
+    def __
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
     window.show()
     sys.exit(app.exec_())

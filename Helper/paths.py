@@ -1,0 +1,1 @@
+gui_theme_path = "C:\\Users\\josep\\PycharmProjects\\GroceryListApp\\Helper\\paths.py"
